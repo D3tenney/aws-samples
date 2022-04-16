@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: 'AWS::Serverless-2016-10-31'
+Description: A lambda function to send alerts about EC2 instances
+
+Resources:
+  Topic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Sub "aws-resource-alarm-${AWS::Region}"
+
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Architectures:
+        - arm64
+      CodeUri: function/
+      Handler: lambda_function.event_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          REGION: !Ref AWS::Region
+          TOPIC_ARN: !Ref Topic
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt Topic.TopicName
+        - EC2DescribePolicy: {}
+      Timeout: 60
+      Events:
+        CronEvent:
+          Type: Schedule
+          Properties:
+            Enabled: true
+            Description: >
+                         Every 30 minutes,
+                         Between 4-6PM EDT (20-22 UTC),
+                         Mon-Fri
+            Schedule: cron(*/30 20-22 ? * MON-FRI *)
+
+Outputs:
+  TopicArn:
+    Description: "ARN for EC2 Alarm Topic"
+    Value: !Ref Topic
+  TopicName:
+    Description: "Name for EC2 Alarm Topic"
+    Value: !GetAtt Topic.TopicName
+  LambdaName:
+    Description: "Name for EC2 Alarm Lambda"
+    Value: !Ref Function
