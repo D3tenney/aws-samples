@@ -1,0 +1,19 @@
+//https://code.visualstudio.com/docs/remote/devcontainerjson-reference
+{
+    "name": "local_glue_dev",
+    "image": "amazon/aws-glue-libs:glue_libs_3.0.0_image_01",
+    /*
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "amazonwebservices.aws-toolkit-vscode"
+    ],
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws/,target=/home/glue_user/.aws/,type=bind,consistency=cached"
+    ],
+    "remoteUser": "glue_user",
+    "remoteEnv": {
+        "AWS_PROFILE": "default"
+    }
+    */
+}
