@@ -56,3 +56,28 @@ command.
  * `cdk docs`        open CDK documentation
 
 Enjoy!
+
+
+## Docker Local Glue Job Development
+
+See [Docs](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-libraries.html)
+
+Pull image:
+```bash
+docker pull amazon/aws-glue-libs:glue_libs_3.0.0_image_01
+```
+Run image:
+```bash
+AWS_PROFILE="default"
+SOURCE_FOLDER=$HOME/<path_to_your_code>
+
+docker run -it \
+-v ~/.aws:/home/glue_user/.aws \
+-e AWS_PROFILE=$AWS_PROFILE \
+-e DISABLE_SSL=true \
+--rm \
+-p 4040:4040 -p 18080:18080 \
+--name glue_pyspark \
+amazon/aws-glue-libs:glue_libs_3.0.0_image_01 \
+pyspark
+```

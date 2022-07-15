@@ -1,19 +1,47 @@
-//https://code.visualstudio.com/docs/remote/devcontainerjson-reference
 {
+    //"image": "amazon/aws-glue-libs:glue_libs_3.0.0_image_01",
     "name": "local_glue_dev",
-    "image": "amazon/aws-glue-libs:glue_libs_3.0.0_image_01",
-    /*
-    "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "amazonwebservices.aws-toolkit-vscode"
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME": "glue_user",
+            "USER_UID": "1000",
+            "USER_GID": "1000"
+        }
+    },
+    "forwardPorts": [
+    //    "4040:4040",
+    //    "18080:18080"
     ],
-    "mounts": [
-        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws/,target=/home/glue_user/.aws/,type=bind,consistency=cached"
-    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "amazonwebservices.aws-toolkit-vscode"
+            ],
+            /*
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/bin/python3",
+                "python.analysis.extraPaths": [
+                    "/home/glue_user/aws-glue-libs/PyGlue.zip:/home/glue_user/spark/python/lib/py4j-0.10.9-src.zip:/home/glue_user/spark/python/"
+                ]
+            }*/
+        }
+    },
+    "containerEnv": {
+        "AWS_PROFILE": "default",
+        "DISABLE_SSL": "true"
+    },
+    //"workspaceMount": "source=${localWorkspaceFolder},target=/home/glue_user/workspace,type=bind,consistency=cached",
+    //"workspaceFolder": "${localEnv:HOME}${localEnv:USERPROFILE}/Documents/projects/git_projects/aws-samples/local_glue_dev/.vscode",
+    //"postStartCommand": "pyspark",
     "remoteUser": "glue_user",
-    "remoteEnv": {
-        "AWS_PROFILE": "default"
-    }
-    */
+    //"postStartCommand": "chmod -R 777 /tmp/spark-events && chown glue_user: /home/glue_user/.aws",
+    //"postAttachCommand": "su glue_user",
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws/credentials,target=/home/glue_user/.aws/credentials,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws/config,target=/home/glue_user/.aws/config,type=bind,consistency=cached",
+        //"source=${localEnv:HOME}${localEnv:USERPROFILE}/Documents/projects/repos/local_glue_dev/,target=/home/glue_user/workspace/,type=bind,consistency=cached"
+    ]
 }

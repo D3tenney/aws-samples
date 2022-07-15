@@ -1,3 +1,4 @@
+#https://code.visualstudio.com/docs/remote/devcontainerjson-reference
 from codecs import Codec
 from logging import captureWarnings
 from os import remove
